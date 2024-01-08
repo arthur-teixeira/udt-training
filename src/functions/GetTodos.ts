@@ -4,14 +4,18 @@ import errorHandler from "../errorHandler";
 import initializeDataSource from "../initializeDataSource";
 import formatTodo from "./formatTodo";
 
-async function GetTodos(_request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+async function GetTodos(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     try {
         await initializeDataSource();
-        const todos = await Todo.find();
+        const profile_id = request.params.profile;
+        const todos = await Todo.findBy({ profile_id });
 
         return {
             status: 200,
             jsonBody: todos.map(formatTodo),
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            }
         };
     } catch (error) {
         context.error(error);
@@ -22,6 +26,6 @@ async function GetTodos(_request: HttpRequest, context: InvocationContext): Prom
 app.http('GetTodos', {
     methods: ['GET'],
     authLevel: 'anonymous',
-    route: 'todos',
+    route: 'todos/{profile}',
     handler: GetTodos,
 });

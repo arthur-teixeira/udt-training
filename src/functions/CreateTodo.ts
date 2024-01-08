@@ -13,9 +13,9 @@ async function CreateTodo(request: HttpRequest, context: InvocationContext): Pro
             throw validation.error;
         }
 
-        const { name, completed } = validation.value;
+        const { name, completed, profile_id } = validation.value;
         const todo = new Todo();
-        todo.initialize(name, completed ? 'Y' : 'N');
+        todo.initialize(name, completed ? 'Y' : 'N', profile_id);
         await todo.save();
 
         return {
@@ -24,6 +24,7 @@ async function CreateTodo(request: HttpRequest, context: InvocationContext): Pro
                 id: todo.id,
                 name,
                 completed,
+                profile_id,
             }
         }
     } catch (error) {

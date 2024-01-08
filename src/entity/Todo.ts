@@ -11,9 +11,13 @@ export default class Todo extends BaseEntity {
     @Column()
     completed: string;
 
-    public initialize(name: string, completed: string) {
+    @Column()
+    profile_id: string;
+
+    public initialize(name: string, completed: string, profileId: string) {
         this.name = name;
-        this.completed = completed
+        this.completed = completed;
+        this.profile_id = profileId;
     }
 }
 
